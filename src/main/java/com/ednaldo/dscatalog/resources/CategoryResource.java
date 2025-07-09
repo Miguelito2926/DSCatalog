@@ -1,7 +1,10 @@
 package com.ednaldo.dscatalog.resources;
 
+import com.ednaldo.dscatalog.dto.CategoryDTO;
 import com.ednaldo.dscatalog.entities.Category;
 import com.ednaldo.dscatalog.services.CategoryService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +23,7 @@ public class CategoryResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getCategories() {
-        return ResponseEntity.ok(categoryService.getCategories());
+    public ResponseEntity<Page<CategoryDTO>> getCategories(Pageable pageable) {
+        return ResponseEntity.ok(categoryService.getCategories(pageable));
     }
 }

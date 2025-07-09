@@ -1,7 +1,10 @@
 package com.ednaldo.dscatalog.services;
 
+import com.ednaldo.dscatalog.dto.CategoryDTO;
 import com.ednaldo.dscatalog.entities.Category;
 import com.ednaldo.dscatalog.repositories.CategoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +18,8 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getCategories() {
-        return categoryRepository.findAll();
+    public Page<CategoryDTO> getCategories(Pageable pageable) {
+        Page<Category> list = categoryRepository.findAll(pageable);
+        return list.map(CategoryDTO::new);
     }
 }
