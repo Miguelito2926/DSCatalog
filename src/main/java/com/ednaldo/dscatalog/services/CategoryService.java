@@ -41,11 +41,14 @@ public class CategoryService {
     }
 
     @Transactional
-    public void updateCategory(CategoryDTO dto, Long id) {
+    public CategoryDTO updateCategory(CategoryDTO dto, Long id) {
         try {
+
             Category category = categoryRepository.getReferenceById(id);
             toEntity(dto, category);
             categoryRepository.save(category);
+            return new CategoryDTO(category);
+
         } catch (Exception e) {
             throw new ResourceNotFoundException("Not found category: " + id);
         }
