@@ -20,9 +20,10 @@ public class CategoryService {
 
     @Transactional
     public CategoryDTO insertCategory(CategoryDTO categoryDTO) {
-        Category cat = toEntity(categoryDTO);
-        var categorySave = categoryRepository.save(cat);
-        return new CategoryDTO(categorySave);
+        Category cat = new Category();
+         toEntity(categoryDTO, cat);
+        categoryRepository.save(cat);
+        return new CategoryDTO(cat);
     }
 
     @Transactional
@@ -39,9 +40,18 @@ public class CategoryService {
         return new CategoryDTO(category);
     }
 
-    public Category toEntity(CategoryDTO dto) {
-        Category category = new Category();
-        category.setName(dto.getName());
-        return category;
+    @Transactional
+    public void updateCategory(CategoryDTO dto, Long id) {
+        try {
+            Category category = categoryRepository.getReferenceById(id);
+            toEntity(dto, category);
+            categoryRepository.save(category);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Not found category: " + id);
+        }
+    }
+
+    public void toEntity(CategoryDTO dto,Category entity) {
+        entity.setName(dto.getName());
     }
 }

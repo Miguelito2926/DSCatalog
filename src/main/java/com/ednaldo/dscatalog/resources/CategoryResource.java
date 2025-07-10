@@ -5,7 +5,6 @@ import com.ednaldo.dscatalog.services.CategoryService;
 import com.ednaldo.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,5 +37,11 @@ public class CategoryResource {
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> getByCategory(@PathVariable Long id) throws ResourceNotFoundException {
         return ResponseEntity.ok(categoryService.getByCategory(id));
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> updateCategory(@RequestBody CategoryDTO dto, @PathVariable Long id) {
+        categoryService.updateCategory(dto, id);
+        return ResponseEntity.noContent().build();
     }
 }
