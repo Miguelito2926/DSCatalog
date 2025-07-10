@@ -19,6 +19,13 @@ public class CategoryService {
     }
 
     @Transactional
+    public CategoryDTO insertCategory(CategoryDTO categoryDTO) {
+        Category cat = toEntity(categoryDTO);
+        var categorySave = categoryRepository.save(cat);
+        return new CategoryDTO(categorySave);
+    }
+
+    @Transactional
     public Page<CategoryDTO> getCategories(Pageable pageable) {
         Page<Category> list = categoryRepository.findAll(pageable);
         return list.map(CategoryDTO::new);
@@ -30,5 +37,11 @@ public class CategoryService {
             .orElseThrow(() -> new ResourceNotFoundException("Not found category: " + id));
 
         return new CategoryDTO(category);
+    }
+
+    public Category toEntity(CategoryDTO dto) {
+        Category category = new Category();
+        category.setName(dto.getName());
+        return category;
     }
 }
