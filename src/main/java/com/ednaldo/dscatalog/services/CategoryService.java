@@ -3,8 +3,11 @@ package com.ednaldo.dscatalog.services;
 import com.ednaldo.dscatalog.dto.CategoryDTO;
 import com.ednaldo.dscatalog.entities.Category;
 import com.ednaldo.dscatalog.repositories.CategoryRepository;
+import com.ednaldo.dscatalog.services.exceptions.DataBaseIntegrityException;
 import com.ednaldo.dscatalog.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -56,11 +59,12 @@ public class CategoryService {
 
     @Transactional
     public void deleteCategory(Long id) {
-
-        if (!categoryRepository.existsById(id)){
-            throw new ResourceNotFoundException("Not found category: " + id);
-        }else {
+        try {
             categoryRepository.deleteById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Not found category: " + id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseIntegrityException("Referential integrity violation");
         }
     }
 
