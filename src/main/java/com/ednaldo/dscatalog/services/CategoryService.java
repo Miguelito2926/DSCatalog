@@ -51,6 +51,16 @@ public class CategoryService {
         }
     }
 
+    @Transactional
+    public void deleteCategory(Long id) {
+
+        if (!categoryRepository.existsById(id)){
+            throw new ResourceNotFoundException("Not found category: " + id);
+        }else {
+            categoryRepository.deleteById(id);
+        }
+    }
+
     public void toEntity(CategoryDTO dto,Category entity) {
         entity.setName(dto.getName());
     }
