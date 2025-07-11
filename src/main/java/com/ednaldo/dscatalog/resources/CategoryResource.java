@@ -30,7 +30,12 @@ public class CategoryResource {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> getCategories(Pageable pageable) {
+    public ResponseEntity<Page<CategoryDTO>> getCategories(
+            Pageable pageable,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "sort", defaultValue = "name") String sort,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction) {
         return ResponseEntity.ok(categoryService.getCategories(pageable));
     }
 
